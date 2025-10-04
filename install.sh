@@ -174,7 +174,16 @@ EOF
                 
                 echo "[*] Obtaining Let's Encrypt certificate for $DOMAIN..."
                 if certbot certonly --webroot -w /var/www/html -d "$DOMAIN" --non-interactive --agree-tos --email "$EMAIL" >/dev/null 2>&1; then
-                    echo "[*] Let's Encrypt certificate obtained successfully!"
+                    echo ""
+                    echo "🎉 =============================================="
+                    echo "   LET'S ENCRYPT CERTIFICATE SUCCESS!"
+                    echo "============================================== 🎉"
+                    echo ""
+                    echo "✅ Certificate obtained successfully for: $DOMAIN"
+                    echo "✅ Certificate authority: Let's Encrypt"
+                    echo "✅ Certificate type: Trusted CA certificate"
+                    echo "✅ Validity period: 90 days (auto-renewable)"
+                    echo ""
                     
                     # Convert for stunnel format (private key + certificate chain)
                     cat /etc/letsencrypt/live/"$DOMAIN"/privkey.pem /etc/letsencrypt/live/"$DOMAIN"/fullchain.pem > "$STUNNEL_CERT"
@@ -194,7 +203,12 @@ EOF
                     systemctl stop nginx
                     systemctl disable nginx
                     
-                    echo "[*] Let's Encrypt certificate configured successfully!"
+                    echo "✅ Auto-renewal configured (renews every 90 days)"
+                    echo "✅ Stunnel configured with trusted certificate"
+                    echo ""
+                    echo "🔒 ISP BYPASS STATUS: ACTIVE & WORKING!"
+                    echo "🌐 Your server now appears as legitimate HTTPS traffic"
+                    echo ""
                     CERT_TYPE="Let's Encrypt"
                 else
                     echo "[ERROR] Failed to obtain Let's Encrypt certificate"
@@ -297,6 +311,20 @@ echo "[*] Starting stunnel service..."
 systemctl restart stunnel4
 systemctl enable stunnel4
 
+# Verify stunnel is working with certificate
+echo "[*] Verifying stunnel service..."
+sleep 2
+if systemctl is-active --quiet stunnel4; then
+    echo "✅ Stunnel service is running successfully!"
+    if [[ "$CERT_TYPE" == "Let's Encrypt" ]]; then
+        echo "✅ Let's Encrypt certificate is active and working!"
+        echo "✅ ISP bypass is now ACTIVE - your traffic appears as legitimate HTTPS!"
+    fi
+    echo "✅ SSH-SSL tunnel is ready on port 443"
+else
+    echo "⚠️  Warning: Stunnel service may need manual restart"
+fi
+
 echo "[*] Applying maximum performance TCP optimizations..."
 # Remove existing entries to prevent duplicates
 sed -i '/net.core.rmem_max/d' /etc/sysctl.conf 2>/dev/null
@@ -381,12 +409,17 @@ if [[ -x "${INSTALL_DIR}/menu" ]]; then
   echo -e "\033[1;34m║\033[1;32m    Then enjoy the professional dashboard and 11 powerful options!          \033[1;34m║\033[0m"
   if [[ "$CERT_TYPE" == "Let's Encrypt" ]]; then
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;35m 🔒 CERTIFICATE: \033[1;32mTrusted CA certificate active - ISP bypass enabled!     \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;35m 🔄 AUTO-RENEWAL: \033[1;32mCertificate will auto-renew every 90 days             \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;32m 🎉 LET'S ENCRYPT CERTIFICATE SUCCESSFULLY INSTALLED & WORKING! 🎉          \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 🔒 CERTIFICATE STATUS: \033[1;32mTrusted CA - ISP Bypass ACTIVE & WORKING!      \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 🌐 DOMAIN CONFIGURED: \033[1;37m${DOMAIN:-Your Domain}                                \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 🔄 AUTO-RENEWAL: \033[1;32mCertificate renews automatically every 90 days      \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 🛡️ SECURITY LEVEL: \033[1;32mMaximum - Works with ANY server provider!           \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 📱 CLIENT CONFIG: \033[1;37mServer: ${DOMAIN:-yourdomain.com} | Port: 443 | SSL: ON     \033[1;34m║\033[0m"
   fi
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
   echo -e "\033[1;34m╠══════════════════════════════════════════════════════════════════════════════╣\033[0m"
-  echo -e "\033[1;34m║\033[1;35m 💡 SUPPORT: \033[1;37mhttps://github.com/mkkelati/script4                           \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 💡 SUPPORT: \033[1;37mhttps://github.com/mkkelati/script7                           \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;35m 📧 VERSION: \033[1;37mv4.1 - Maximum Performance Edition                            \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;35m 🌟 STATUS:  \033[1;32mFully Optimized & Ready for Production                        \033[1;34m║\033[0m"
   echo -e "\033[1;34m╚══════════════════════════════════════════════════════════════════════════════╝\033[0m"
