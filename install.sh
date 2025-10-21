@@ -1,5 +1,5 @@
 #!/bin/bash
-# MK Script Manager v4.0 - Installation Script
+# MK Script Manager v4.2 - Installation Script (with Squid & Shadowsocks)
 # Compatible with Ubuntu 20.04 - 24.04 LTS
 
 if [[ "$EUID" -ne 0 ]]; then
@@ -9,7 +9,8 @@ fi
 
 clear
 echo "==========================================="
-echo "    MK Script Manager v4.0 Installer"
+echo "  MK Script Manager v4.2 Installer"
+echo "  + Squid Proxy & Shadowsocks Support"
 echo "==========================================="
 echo ""
 echo "[*] Installing system dependencies..."
@@ -371,6 +372,38 @@ touch /etc/mk-script/users.txt
 # Create password storage directory
 mkdir -p /etc/mk-script/senha
 
+echo "[*] Setting up optional proxy services..."
+echo ""
+echo "Would you like to install additional proxy services?"
+echo ""
+echo "1) Squid Proxy (HTTP/HTTPS proxy with SSL/TLS)"
+echo "2) Shadowsocks (Secure SOCKS5 proxy with obfuscation)"
+echo "3) Both Squid and Shadowsocks"
+echo "4) Skip (install later from menu)"
+echo ""
+read -p "Enter your choice [1-4]: " proxy_choice
+
+case $proxy_choice in
+    1|2|3)
+        if [[ "$proxy_choice" == "1" ]] || [[ "$proxy_choice" == "3" ]]; then
+            echo ""
+            echo "[*] Installing Squid Proxy..."
+            apt-get install -y squid squid-openssl apache2-utils >/dev/null 2>&1
+            echo "[✓] Squid Proxy installed (configure from menu option 14)"
+        fi
+        
+        if [[ "$proxy_choice" == "2" ]] || [[ "$proxy_choice" == "3" ]]; then
+            echo ""
+            echo "[*] Installing Shadowsocks..."
+            apt-get install -y shadowsocks-libev simple-obfs >/dev/null 2>&1
+            echo "[✓] Shadowsocks installed (configure from menu option 15)"
+        fi
+        ;;
+    *)
+        echo "[*] Skipping proxy installation (you can install later from menu)"
+        ;;
+esac
+
 echo "[*] Verifying installation..."
 if [[ -x "${INSTALL_DIR}/menu" ]]; then
   clear
@@ -390,7 +423,7 @@ if [[ -x "${INSTALL_DIR}/menu" ]]; then
   echo -e "\033[1;34m║\033[1;33m    ██║ ╚═╝ ██║██║  ██╗    ███████║╚██████╗██║  ██║██║██║        ██║       \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;33m    ╚═╝     ╚═╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝       \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;35m                        🚀 MANAGER v4.0 - READY TO USE! 🚀                   \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m                        🚀 MANAGER v4.2 - READY TO USE! 🚀                   \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
   echo -e "\033[1;34m╠══════════════════════════════════════════════════════════════════════════════╣\033[0m"
   echo -e "\033[1;34m║\033[1;37m 🎯 WELCOME TO THE MOST ADVANCED SSH MANAGEMENT SYSTEM!                      \033[1;34m║\033[0m"
@@ -399,7 +432,8 @@ if [[ -x "${INSTALL_DIR}/menu" ]]; then
   echo -e "\033[1;34m║\033[1;32m ✅ Professional dashboard with real-time system monitoring                  \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;32m ✅ Advanced user limiter with connection enforcement                         \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;32m ✅ Server optimization with automated performance tuning                    \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;32m ✅ 11 comprehensive management options for complete control                 \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;32m ✅ Squid Proxy & Shadowsocks SSL/TLS support (optional)                     \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;32m ✅ 15 comprehensive management options for complete control                 \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
   echo -e "\033[1;34m╠══════════════════════════════════════════════════════════════════════════════╣\033[0m"
   echo -e "\033[1;34m║\033[1;33m 🚀 GET STARTED:                                                             \033[1;34m║\033[0m"
@@ -420,11 +454,11 @@ if [[ -x "${INSTALL_DIR}/menu" ]]; then
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
   echo -e "\033[1;34m╠══════════════════════════════════════════════════════════════════════════════╣\033[0m"
   echo -e "\033[1;34m║\033[1;35m 💡 SUPPORT: \033[1;37mhttps://github.com/mkkelati/script7                           \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;35m 📧 VERSION: \033[1;37mv4.1 - Maximum Performance Edition                            \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;35m 📧 VERSION: \033[1;37mv4.2 - Maximum Performance + Proxy Edition                    \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;35m 🌟 STATUS:  \033[1;32mFully Optimized & Ready for Production                        \033[1;34m║\033[0m"
   echo -e "\033[1;34m╚══════════════════════════════════════════════════════════════════════════════╝\033[0m"
   echo ""
-  echo -e "\033[1;33m⭐ Thank you for choosing MK Script Manager v4.1 - Maximum Performance! ⭐\033[0m"
+  echo -e "\033[1;33m⭐ Thank you for choosing MK Script Manager v4.2 + Proxy Support! ⭐\033[0m"
   echo ""
 else
   echo "[ERROR] Installation failed. Menu command not found."
