@@ -71,9 +71,9 @@ sudo ./install.sh
 - **User management database** at `/etc/mk-script/users.txt`
 - **Auto-renewal system** for certificates
 - **Performance optimizations** (BBR, TCP tuning)
-- **Squid Proxy** (optional - HTTP/HTTPS proxy with SSL/TLS)
-- **Shadowsocks** (optional - Secure SOCKS5 with obfuscation)
 - **Required directories** and permissions
+
+**Note:** Squid Proxy & Shadowsocks are installed via menu options 14 & 15 (requires SSL tunnel configuration first)
 
 ### 🔐 Certificate Setup
 During installation, you'll choose between:
@@ -186,7 +186,11 @@ The integrated Banner Creator allows you to design professional SSH login banner
 - **Auto-restart**: SSH service restart for immediate effect
 
 ## 🌐 Squid Proxy Manager
-The integrated Squid Proxy provides HTTP/HTTPS proxy capabilities with SSL/TLS support:
+The integrated Squid Proxy provides HTTP/HTTPS proxy capabilities with SSL/TLS support.
+
+**Prerequisites:** SSL tunnel must be configured first (option 4 - Connection Mode)
+
+**Installation:** Access from menu option 14
 
 ### Features:
 - **SSL/TLS Encryption**: Secure HTTPS proxy with SSL bumping
@@ -221,7 +225,11 @@ Authentication: Optional (username/password if enabled)
 ```
 
 ## 🔐 Shadowsocks Manager
-The integrated Shadowsocks provides secure SOCKS5 proxy with advanced obfuscation:
+The integrated Shadowsocks provides secure SOCKS5 proxy with advanced obfuscation.
+
+**Prerequisites:** SSL tunnel must be configured first (option 4 - Connection Mode)
+
+**Installation:** Access from menu option 15
 
 ### Features:
 - **Modern Encryption**: AEAD ciphers (AES-256-GCM, ChaCha20-Poly1305)

@@ -289,11 +289,10 @@ ciphersuites = TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_G
 sslVersion = TLSv1.2
 sslVersionMax = TLSv1.3
 
-# Security options
+# Security options - Compatible with all stunnel versions
 options = NO_SSLv2
 options = NO_SSLv3
 options = NO_TLSv1
-options = NO_TLSv1_1
 
 # Session resumption for realistic HTTPS behavior
 sessionCacheSize = 1000
@@ -372,38 +371,6 @@ touch /etc/mk-script/users.txt
 # Create password storage directory
 mkdir -p /etc/mk-script/senha
 
-echo "[*] Setting up optional proxy services..."
-echo ""
-echo "Would you like to install additional proxy services?"
-echo ""
-echo "1) Squid Proxy (HTTP/HTTPS proxy with SSL/TLS)"
-echo "2) Shadowsocks (Secure SOCKS5 proxy with obfuscation)"
-echo "3) Both Squid and Shadowsocks"
-echo "4) Skip (install later from menu)"
-echo ""
-read -p "Enter your choice [1-4]: " proxy_choice
-
-case $proxy_choice in
-    1|2|3)
-        if [[ "$proxy_choice" == "1" ]] || [[ "$proxy_choice" == "3" ]]; then
-            echo ""
-            echo "[*] Installing Squid Proxy..."
-            apt-get install -y squid squid-openssl apache2-utils >/dev/null 2>&1
-            echo "[✓] Squid Proxy installed (configure from menu option 14)"
-        fi
-        
-        if [[ "$proxy_choice" == "2" ]] || [[ "$proxy_choice" == "3" ]]; then
-            echo ""
-            echo "[*] Installing Shadowsocks..."
-            apt-get install -y shadowsocks-libev simple-obfs >/dev/null 2>&1
-            echo "[✓] Shadowsocks installed (configure from menu option 15)"
-        fi
-        ;;
-    *)
-        echo "[*] Skipping proxy installation (you can install later from menu)"
-        ;;
-esac
-
 echo "[*] Verifying installation..."
 if [[ -x "${INSTALL_DIR}/menu" ]]; then
   clear
@@ -432,7 +399,7 @@ if [[ -x "${INSTALL_DIR}/menu" ]]; then
   echo -e "\033[1;34m║\033[1;32m ✅ Professional dashboard with real-time system monitoring                  \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;32m ✅ Advanced user limiter with connection enforcement                         \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;32m ✅ Server optimization with automated performance tuning                    \033[1;34m║\033[0m"
-  echo -e "\033[1;34m║\033[1;32m ✅ Squid Proxy & Shadowsocks SSL/TLS support (optional)                     \033[1;34m║\033[0m"
+  echo -e "\033[1;34m║\033[1;32m ✅ Squid Proxy & Shadowsocks available in menu (options 14 & 15)            \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;32m ✅ 15 comprehensive management options for complete control                 \033[1;34m║\033[0m"
   echo -e "\033[1;34m║\033[1;36m                                                                              \033[1;34m║\033[0m"
   echo -e "\033[1;34m╠══════════════════════════════════════════════════════════════════════════════╣\033[0m"

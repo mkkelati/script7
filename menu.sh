@@ -2601,6 +2601,19 @@ install_squid() {
     echo -e "${BLUE}│${WHITE}      SQUID PROXY SSL/TLS SETUP        ${BLUE}│${RESET}"
     echo -e "${BLUE}└────────────────────────────────────────┘${RESET}\n"
     
+    # Check if stunnel is configured
+    if [[ ! -f "/etc/stunnel/stunnel.pem" ]]; then
+        echo -e "${RED}⚠️  SSL/TLS TUNNEL NOT CONFIGURED!${RESET}\n"
+        echo -e "${YELLOW}Squid Proxy requires SSL/TLS tunnel for secure operation.${RESET}"
+        echo -e "${WHITE}Please configure SSL tunnel first:${RESET}"
+        echo -e "${GREEN}1. Go to main menu${RESET}"
+        echo -e "${GREEN}2. Select option 4 (Connection Mode)${RESET}"
+        echo -e "${GREEN}3. Configure SSL tunnel${RESET}"
+        echo -e "${GREEN}4. Then return here to install Squid${RESET}\n"
+        read -p "Press Enter to return to menu..."
+        return
+    fi
+    
     if is_squid_installed; then
         echo -e "${YELLOW}⚠️  Squid is already installed!${RESET}\n"
         read -p "Do you want to reinstall/reconfigure? (y/n): " reinstall
@@ -2957,6 +2970,19 @@ install_shadowsocks() {
     echo -e "\n${BLUE}┌────────────────────────────────────────┐${RESET}"
     echo -e "${BLUE}│${WHITE}    SHADOWSOCKS SSL/TLS SETUP          ${BLUE}│${RESET}"
     echo -e "${BLUE}└────────────────────────────────────────┘${RESET}\n"
+    
+    # Check if stunnel is configured
+    if [[ ! -f "/etc/stunnel/stunnel.pem" ]]; then
+        echo -e "${RED}⚠️  SSL/TLS TUNNEL NOT CONFIGURED!${RESET}\n"
+        echo -e "${YELLOW}Shadowsocks requires SSL/TLS tunnel for secure operation.${RESET}"
+        echo -e "${WHITE}Please configure SSL tunnel first:${RESET}"
+        echo -e "${GREEN}1. Go to main menu${RESET}"
+        echo -e "${GREEN}2. Select option 4 (Connection Mode)${RESET}"
+        echo -e "${GREEN}3. Configure SSL tunnel${RESET}"
+        echo -e "${GREEN}4. Then return here to install Shadowsocks${RESET}\n"
+        read -p "Press Enter to return to menu..."
+        return
+    fi
     
     if is_shadowsocks_installed; then
         echo -e "${YELLOW}⚠️  Shadowsocks is already installed!${RESET}\n"
